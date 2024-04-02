@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TOP Library</title>
     <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <ul id="books"></ul>
+  <button id="add-book-button">New book</button>
+  <div id="new-book-form">
+    <form action="">
+        <div>
+            <label for="new-book-form__title">Title</label>
+        <input type="text" id="new-book-form__title">
+        </div>
+        <div>
+            <label for="new-book-form__author">Author</label>
+            <input type="text" id="new-book-form__author">
+        </div>
+        <div>  
+            <label for="new-book-form__pages">Page count</label>
+            <input type="number" id="new-book-form__pages">
+        </div>
+        <div>
+            <input type="checkbox" id="new-book-form__read">
+            <label for="new-book-form__title">I've read it already</label>
+        </div>
+        <button id="new-book-form__submit">Add book</button>
+    </form>
+  </div>
+  <ol id="books"></ul>
 </body>
 </html>

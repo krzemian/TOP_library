@@ -11,11 +11,11 @@ function Book(title, author, pages, status = NOT_READ) {
 }
 
 function addBookToLibrary() {
-  const title = prompt('Title');
-  const author = prompt('Author');
-  const pages = prompt('Pages');
-  const status = prompt('Did you read it? (yes/no)') == 'yes' ? READ : NOT_READ;
-
+  const title = document.querySelector('#new-book-form__title').value;
+  const author = document.querySelector('#new-book-form__author').value;
+  const pages = document.querySelector('#new-book-form__pages').value;
+  const status = document.querySelector('#new-book-form__read').checked ? READ : NOT_READ;
+  
   const book = new Book(title, author, pages, status);
   myLibrary.push(book);
 }
@@ -30,16 +30,91 @@ function addDummyBooks() {
   myLibrary.push(lotr3);
 }
 
+function hideBooks() {
+  const books = document.querySelector('#books');
+
+  books.textContent = '';
+}
+
 function showBooks() {
   const books = document.querySelector('#books');
 
-  myLibrary.forEach((book) => {
+  myLibrary.forEach((book, index) => {
     const bookDOM = document.createElement('li');
-    bookDOM.textContent = `${book.status ? "1 " : ""}${book.title} by ${book.author} (${book.pages} pages)`;
+    bookDOM.textContent = `${book.status ? "✅ " : ""}${book.title} by ${book.author} (${book.pages} pages)`;
+    bookDOM.setAttribute('data-index', index);
+
+    // Add delete button
+    const deleteButtonDOM = document.createElement('button');
+    deleteButtonDOM.textContent = 'X';
+    deleteButtonDOM.classList.add('books__delete-button');
+    deleteButtonDOM.setAttribute('data-index', index);
+
+    // TODO: Move the listener to parent and work out the clicked element
+    deleteButtonDOM.addEventListener('click', () => {
+      deleteBook(index);
+      refreshBooks();
+    });
+    bookDOM.appendChild(deleteButtonDOM);
+
+    // Add "mark as (un)read" button
+    const toggleStatusButtonDOM = document.createElement('button');
+    if (book.status === NOT_READ) {
+        toggleStatusButtonDOM.textContent = 'Mark as read';
+    } else {
+        toggleStatusButtonDOM.textContent = 'Mark as unread';
+    }
+
+    // TODO: Likewise, move the listener to parent (multiple -> single)
+    toggleStatusButtonDOM.addEventListener('click', () => {
+      toggleBookStatus(index);
+      refreshBooks();
+    });
+    bookDOM.appendChild(toggleStatusButtonDOM);
 
     books.appendChild(bookDOM);
   });
 }
 
+function refreshBooks() {
+    hideBooks();
+    showBooks();
+}
+
+function toggleBookStatus(index) {
+  myLibrary[index].status = !myLibrary[index].status;
+}
+
+function deleteBook(index) {
+  myLibrary.splice(index, 1);
+}
+
+function showForm() {
+    const form = document.querySelector('#new-book-form');
+
+    form.style.display = 'block';
+}
+
+function hideForm() {
+    const form = document.querySelector('#new-book-form');
+
+    form.style.display = 'none';
+}
+
+function bindEvents() {
+    const showFormButton = document.querySelector('#add-book-button');
+    const formButton = document.querySelector('#new-book-form__submit');
+
+    showFormButton.addEventListener('click', showForm);
+
+    formButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        addBookToLibrary();
+        refreshBooks();
+        hideForm();
+    });
+}
+
 addDummyBooks();
 showBooks();
+bindEvents();
