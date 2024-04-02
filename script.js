@@ -21,7 +21,7 @@ function addBookToLibrary() {
 }
 
 function addDummyBooks() {
-  const lotr1 = new Book('Lord of the Rings #1', 'J. R. R. Tolkien', 300, READ);
+  const lotr1 = new Book('Lord of the Rings #1', 'J. R. R. Tolkien', 300, NOT_READ);
   const lotr2 = new Book('Lord of the Rings #2', 'J. R. R. Tolkien', 420, READ);
   const lotr3 = new Book('Lord of the Rings #3', 'J. R. R. Tolkien', 510, READ);
 
@@ -30,4 +30,16 @@ function addDummyBooks() {
   myLibrary.push(lotr3);
 }
 
+function showBooks() {
+  const books = document.querySelector('#books');
+
+  myLibrary.forEach((book) => {
+    const bookDOM = document.createElement('li');
+    bookDOM.textContent = `${book.status ? "1 " : ""}${book.title} by ${book.author} (${book.pages} pages)`;
+
+    books.appendChild(bookDOM);
+  });
+}
+
 addDummyBooks();
+showBooks();
